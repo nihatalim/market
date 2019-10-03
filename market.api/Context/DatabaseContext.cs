@@ -10,7 +10,6 @@ namespace market.api.Context
 {
     public class DatabaseContext : DbContext
     {
-        public IConfiguration Configuration { get; }
         public DbSet<User> Users { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Company> Companies { get; set; }

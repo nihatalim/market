@@ -18,6 +18,7 @@ namespace market.api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .UseDefaultServiceProvider(sp => sp.ValidateOnBuild = false)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
