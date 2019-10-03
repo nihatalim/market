@@ -10,6 +10,7 @@ In this project those technologies are used:
  # Architecture
  
  ## Database Diagram
+ ![Alt Text](https://raw.githubusercontent.com/nihatalim/market/master/market.docs/Database.png)
  
  ## Activity Diagram
  
