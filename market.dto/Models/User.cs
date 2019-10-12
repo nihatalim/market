@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace market.api.Models
+namespace market.dto.Models
 {
-    public class User : BaseEntity
+    public class User : BaseDTO
     {
         public string Mail { get; set; }
         public string Password { get; set; }

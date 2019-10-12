@@ -19,6 +19,7 @@ namespace market.api.Migrations
                     Mail = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Token = table.Column<string>(nullable: true),
+                    ExpirationDate = table.Column<DateTime>(nullable: false),
                     Role = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

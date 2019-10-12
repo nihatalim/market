@@ -222,6 +222,8 @@ namespace market.api.Migrations
 
                     b.Property<DateTime>("DateModified");
 
+                    b.Property<DateTime>("ExpirationDate");
+
                     b.Property<string>("Mail");
 
                     b.Property<string>("Password");

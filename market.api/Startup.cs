@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using market.api.Context;
+using market.api.Middlewares;
+using market.api.Repositories.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +36,20 @@ namespace market.api
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "MARKET API", Version = "v1" });
             });
+
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("Admin", policy =>
+                {
+                    policy.RequireRole("ADMIN");
+                });
+                opt.AddPolicy("Company", policy =>
+                {
+                    policy.RequireRole("COMPANY");
+                });
+            });
+
+            services.AddScoped<ICommonRepository, CommonRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +77,7 @@ namespace market.api
                 endpoints.MapControllers();
             });
 
+            app.UseMiddleware<AuthorizationLayer>();
             
         }
     }

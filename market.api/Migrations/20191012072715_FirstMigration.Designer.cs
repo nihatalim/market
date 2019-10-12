@@ -9,7 +9,7 @@ using market.api.Context;
 namespace market.api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20191003141412_FirstMigration")]
+    [Migration("20191012072715_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,6 +223,8 @@ namespace market.api.Migrations
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DateModified");
+
+                    b.Property<DateTime>("ExpirationDate");
 
                     b.Property<string>("Mail");
 
