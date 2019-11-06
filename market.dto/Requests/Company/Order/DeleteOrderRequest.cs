@@ -4,7 +4,7 @@ using System.Text;
 
 namespace market.dto.Requests.Company.Order
 {
-    public class DeleteOrderRequest
+    public class DeleteOrderRequest : BaseCompanyRequest
     {
         public int OrderID { get; set; }
     }

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace market.dto.Requests.Company.Property
 {
-    public class AddPropertyToProductRequest
+    public class AddPropertyToProductRequest : BaseCompanyRequest
     {
         public string Name { get; set; }
         public string Value { get; set; }
-        public PropertyType PropertyType { get; set; }
+        public PropertyType Type { get; set; }
         public int ProductID { get; set; }
     }
 }

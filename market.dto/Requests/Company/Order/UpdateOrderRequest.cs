@@ -5,8 +5,9 @@ using System.Text;
 
 namespace market.dto.Requests.Company.Order
 {
-    public class UpdateOrderRequest
+    public class UpdateOrderRequest : BaseCompanyRequest
     {
-        public OrderType Type { get; set; }
+        public int? ClientID { get; set; }
+        public decimal DiscountRate { get; set; }
     }
 }

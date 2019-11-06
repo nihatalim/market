@@ -13,9 +13,8 @@ namespace market.dto.Models
         public decimal TotalPrice { get; set; }
         public int CompanyID { get; set; }
         public Company Company { get; set; }
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
         public Category Category { get; set; }
         public ICollection<Property> Properties { get; set; }
-        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

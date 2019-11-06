@@ -19,8 +19,8 @@ namespace market.api.Controllers
 {
     [Produces("application/json")]
     [ApiController]
-    [Route("api/common")]
-    [Authorize(Policy = "COMPANY")]
+    [Route("api/company")]
+    [Authorize(Policy = "Authorized")]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyRepository repository;
@@ -29,12 +29,7 @@ namespace market.api.Controllers
             this.repository = repository;
         }
 
-        // GetProducts(pagination + search)
-        // GetProduct(id)
-
-        // GetOrders(pagination + search)
-        // GetOrder(id)
-
+        [Authorize(Policy = "AddProductToOrderPrivilege")]
         [HttpPost("AddProductToOrder")]
         public async Task<BaseResponse> AddProductToOrder(AddProductToOrderRequest request)
         {
@@ -42,6 +37,7 @@ namespace market.api.Controllers
             return await this.repository.AddProductToOrder(request, id);
         }
         
+        [Authorize(Policy = "AddProductToOrderPrivilege")]
         [HttpPost("AddPropertyToProduct")]
         public async Task<BaseResponse> AddPropertyToProduct(AddPropertyToProductRequest request)
         {

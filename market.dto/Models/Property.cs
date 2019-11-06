@@ -8,7 +8,7 @@ namespace market.dto.Models
     {
         public string Name { get; set; }
         public string Value { get; set; }
-        public PropertyType PropertyType { get; set; }
+        public PropertyType Type { get; set; }
         public int ProductID { get; set; }
         public Product Product { get; set; }
     }

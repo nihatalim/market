@@ -9,7 +9,10 @@ namespace market.api.Models
     {
         public string Name { get; set; }
         public int CompanyID { get; set; }
-        public Company Company { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public virtual Company Company { get; set; }
+        public int? ParentID { get; set; }
+        public virtual Category Parent { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

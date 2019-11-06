@@ -4,8 +4,7 @@ using System.Text;
 
 namespace market.dto.Requests.Company
 {
-    public class UpdateCompanyRequest
+    public class ChangeCompanyStatusRequest : BaseCompanyRequest
     {
-
     }
 }

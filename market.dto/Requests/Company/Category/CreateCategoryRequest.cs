@@ -4,7 +4,7 @@ using System.Text;
 
 namespace market.dto.Requests.Company.Category
 {
-    public class CreateCategoryRequest
+    public class CreateCategoryRequest : BaseCompanyRequest
     {
         public string Name { get; set; }
     }

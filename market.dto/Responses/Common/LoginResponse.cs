@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace market.dto.Responses
+namespace market.dto.Responses.Common
 {
     public class LoginResponse : BaseResponse
     {

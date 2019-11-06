@@ -9,7 +9,7 @@ using market.api.Context;
 namespace market.api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20191012072715_FirstMigration")]
+    [Migration("20191104231014_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,26 +18,6 @@ namespace market.api.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("market.api.Models.Admin", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime>("DateModified");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("UserID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Admins");
-                });
 
             modelBuilder.Entity("market.api.Models.Category", b =>
                 {
@@ -52,13 +32,41 @@ namespace market.api.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("ParentID");
+
                     b.HasKey("ID");
 
                     b.HasIndex("CompanyID");
 
                     b.HasIndex("Name");
 
+                    b.HasIndex("ParentID");
+
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("market.api.Models.Client", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CompanyID");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime>("DateModified");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Number");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CompanyID");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("market.api.Models.Company", b =>
@@ -70,15 +78,15 @@ namespace market.api.Migrations
 
                     b.Property<DateTime>("DateModified");
 
+                    b.Property<bool>("IsActive");
+
                     b.Property<string>("Name");
-
-                    b.Property<string>("Owner");
-
-                    b.Property<int>("UserID");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Companies");
                 });
@@ -88,27 +96,31 @@ namespace market.api.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ClientID");
+
                     b.Property<int>("CompanyID");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DateModified");
 
-                    b.Property<string>("OrderNumber");
+                    b.Property<decimal>("DiscountRate");
 
-                    b.Property<decimal>("TotalDiscount");
+                    b.Property<bool>("IsActive");
 
-                    b.Property<decimal>("TotalPrice");
-
-                    b.Property<decimal>("TotalTax");
+                    b.Property<bool>("IsConfirmed");
 
                     b.Property<int>("Type");
 
                     b.HasKey("ID");
 
+                    b.HasIndex("ClientID");
+
                     b.HasIndex("CompanyID");
 
-                    b.HasIndex("OrderNumber");
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("IsConfirmed");
 
                     b.HasIndex("Type");
 
@@ -126,8 +138,6 @@ namespace market.api.Migrations
 
                     b.Property<DateTime>("DateModified");
 
-                    b.Property<decimal>("DiscountPrice");
-
                     b.Property<decimal>("DiscountRate");
 
                     b.Property<int>("OrderID");
@@ -136,11 +146,7 @@ namespace market.api.Migrations
 
                     b.Property<int>("ProductID");
 
-                    b.Property<decimal>("TaxPrice");
-
                     b.Property<decimal>("TaxRate");
-
-                    b.Property<decimal>("TotalPrice");
 
                     b.HasKey("ID");
 
@@ -151,6 +157,30 @@ namespace market.api.Migrations
                     b.ToTable("OrderProducts");
                 });
 
+            modelBuilder.Entity("market.api.Models.Privilege", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime>("DateModified");
+
+                    b.Property<string>("Key");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Number");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("Number");
+
+                    b.ToTable("Privileges");
+                });
+
             modelBuilder.Entity("market.api.Models.Product", b =>
                 {
                     b.Property<int>("ID")
@@ -158,7 +188,7 @@ namespace market.api.Migrations
 
                     b.Property<string>("Barcode");
 
-                    b.Property<int>("CategoryID");
+                    b.Property<int?>("CategoryID");
 
                     b.Property<int>("CompanyID");
 
@@ -200,7 +230,7 @@ namespace market.api.Migrations
 
                     b.Property<int>("ProductID");
 
-                    b.Property<int>("PropertyType");
+                    b.Property<int>("Type");
 
                     b.Property<string>("Value");
 
@@ -210,9 +240,53 @@ namespace market.api.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.HasIndex("PropertyType");
+                    b.HasIndex("Type");
 
                     b.ToTable("Properties");
+                });
+
+            modelBuilder.Entity("market.api.Models.Role", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CompanyID");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime>("DateModified");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CompanyID");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("market.api.Models.RolePrivilege", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime>("DateModified");
+
+                    b.Property<int>("PrivilegeID");
+
+                    b.Property<int>("RoleID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PrivilegeID");
+
+                    b.HasIndex("RoleID");
+
+                    b.ToTable("RolePrivileges");
                 });
 
             modelBuilder.Entity("market.api.Models.User", b =>
@@ -224,13 +298,13 @@ namespace market.api.Migrations
 
                     b.Property<DateTime>("DateModified");
 
-                    b.Property<DateTime>("ExpirationDate");
+                    b.Property<DateTime?>("ExpirationDate");
 
                     b.Property<string>("Mail");
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Name");
 
-                    b.Property<int>("Role");
+                    b.Property<string>("Password");
 
                     b.Property<string>("Token");
 
@@ -238,17 +312,37 @@ namespace market.api.Migrations
 
                     b.HasIndex("Mail");
 
+                    b.HasIndex("Name");
+
                     b.HasIndex("Token");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("market.api.Models.Admin", b =>
+            modelBuilder.Entity("market.api.Models.UserRole", b =>
                 {
-                    b.HasOne("market.api.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CompanyID");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime>("DateModified");
+
+                    b.Property<int>("RoleID");
+
+                    b.Property<int>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CompanyID");
+
+                    b.HasIndex("RoleID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("market.api.Models.Category", b =>
@@ -257,18 +351,26 @@ namespace market.api.Migrations
                         .WithMany("Categories")
                         .HasForeignKey("CompanyID")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("market.api.Models.Category", "Parent")
+                        .WithMany("Categories")
+                        .HasForeignKey("ParentID");
                 });
 
-            modelBuilder.Entity("market.api.Models.Company", b =>
+            modelBuilder.Entity("market.api.Models.Client", b =>
                 {
-                    b.HasOne("market.api.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
+                    b.HasOne("market.api.Models.Company", "Company")
+                        .WithMany("Clients")
+                        .HasForeignKey("CompanyID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("market.api.Models.Order", b =>
                 {
+                    b.HasOne("market.api.Models.Client", "Client")
+                        .WithMany("Orders")
+                        .HasForeignKey("ClientID");
+
                     b.HasOne("market.api.Models.Company", "Company")
                         .WithMany("Orders")
                         .HasForeignKey("CompanyID")
@@ -278,12 +380,12 @@ namespace market.api.Migrations
             modelBuilder.Entity("market.api.Models.OrderProduct", b =>
                 {
                     b.HasOne("market.api.Models.Order", "Order")
-                        .WithMany("OrderProducts")
+                        .WithMany("Products")
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("market.api.Models.Product", "Product")
-                        .WithMany("OrderProducts")
+                        .WithMany()
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -292,8 +394,7 @@ namespace market.api.Migrations
                 {
                     b.HasOne("market.api.Models.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CategoryID");
 
                     b.HasOne("market.api.Models.Company", "Company")
                         .WithMany("Products")
@@ -306,6 +407,45 @@ namespace market.api.Migrations
                     b.HasOne("market.api.Models.Product", "Product")
                         .WithMany("Properties")
                         .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("market.api.Models.Role", b =>
+                {
+                    b.HasOne("market.api.Models.Company", "Company")
+                        .WithMany("Roles")
+                        .HasForeignKey("CompanyID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("market.api.Models.RolePrivilege", b =>
+                {
+                    b.HasOne("market.api.Models.Privilege", "Privilege")
+                        .WithMany()
+                        .HasForeignKey("PrivilegeID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("market.api.Models.Role", "Role")
+                        .WithMany("Privileges")
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("market.api.Models.UserRole", b =>
+                {
+                    b.HasOne("market.api.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("market.api.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("market.api.Models.User", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

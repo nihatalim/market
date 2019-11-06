@@ -1,4 +1,5 @@
-﻿using System;
+﻿using market.api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace market.api.Repositories.Common
 {
     public class SharedRepository
     {
-        public static api.Models.PropertyType PropertyTypeConverter(dto.Models.PropertyType propertyType)
+        public api.Models.PropertyType PropertyTypeConverter(dto.Models.PropertyType propertyType)
         {
             switch (propertyType)
             {
@@ -22,7 +23,7 @@ namespace market.api.Repositories.Common
                 default: return api.Models.PropertyType.STRING;
             }
         }
-        public static dto.Models.PropertyType PropertyTypeConverter(api.Models.PropertyType propertyType)
+        public dto.Models.PropertyType PropertyTypeConverter(api.Models.PropertyType propertyType)
         {
             switch (propertyType)
             {
@@ -37,31 +38,28 @@ namespace market.api.Repositories.Common
                 default: return dto.Models.PropertyType.STRING;
             }
         }
-        public static PriceCalc PriceCalculator(decimal Price, decimal TaxRate = 18, decimal DiscountRate = 0, int Count = 1) => new PriceCalc(Price, TaxRate, DiscountRate, Count);
-
-        public class PriceCalc
+        public api.Models.OrderType OrderTypeConverter(dto.Models.OrderType orderType)
         {
-            public int Count { get; set; }
-            public decimal Price { get; set; }
-            public decimal TaxRate { get; set; }
-            public decimal DiscountRate { get; set; }
-            public decimal TaxPrice => Decimal.Multiply(
-                                        Decimal.Multiply(
-                                            Decimal.Divide(this.TaxRate, 100), this.Price), this.Count);
-            public decimal DiscountPrice => Decimal.Multiply(
-                                            Decimal.Multiply(
-                                                Decimal.Divide(this.DiscountRate, 100), this.Price), this.Count);
-            public decimal TotalPrice => Decimal.Subtract(Decimal.Add(this.Price, this.TaxPrice), this.DiscountPrice);
-            public PriceCalc(decimal Price, decimal TaxRate = 18, decimal DiscountRate = 0, int Count = 1)
+            switch (orderType)
             {
-                this.Count = Count;
-                this.Price = Price;
-                this.TaxRate = TaxRate;
-                this.DiscountRate = DiscountRate;
+                case dto.Models.OrderType.IN:
+                    return api.Models.OrderType.IN;
+                case dto.Models.OrderType.OUT:
+                    return api.Models.OrderType.OUT;
+                default: return api.Models.OrderType.IN;
             }
         }
-
+        public dto.Models.OrderType OrderTypeConverter(api.Models.OrderType orderType)
+        {
+            switch (orderType)
+            {
+                case api.Models.OrderType.IN:
+                    return dto.Models.OrderType.IN;
+                case api.Models.OrderType.OUT:
+                    return dto.Models.OrderType.OUT;
+                default: return dto.Models.OrderType.IN;
+            }
+        }
+        public string GenerateToken() => Convert.ToBase64String(Guid.NewGuid().ToByteArray());
     }
-
-
 }

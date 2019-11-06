@@ -1,11 +1,8 @@
 ﻿using market.api.Context;
-using market.api.Models;
+using market.dto;
 using market.dto.Requests.Common;
-using market.dto.Responses;
-using Microsoft.EntityFrameworkCore;
+using market.dto.Responses.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace market.api.Repositories.Common
@@ -13,49 +10,28 @@ namespace market.api.Repositories.Common
     public class CommonRepository : ICommonRepository
     {
         private readonly DatabaseContext context;
+        private readonly SharedRepository sharedRepository;
 
-        public CommonRepository(DatabaseContext context)
+        public CommonRepository(DatabaseContext context, SharedRepository sharedRepository)
         {
             this.context = context;
+            this.sharedRepository = sharedRepository;
         }
 
-        public async Task<LoginResponse> LoginAsync(LoginRequest request)
+        public Task<LoginResponse> Login(LoginRequest request)
         {
-            LoginResponse response = new LoginResponse();
-
-            User user = await this.context.Users
-                                    .Where(a => a.Mail.Equals(request.Mail))
-                                    .Where(a => a.Password.Equals(request.Password))
-                                    .FirstOrDefaultAsync();
-
-            if (user == null)
-            {
-                response.Result.Message = "Bu mail ve şifre kombinasyonuna sahip bir kullanıcı bulunamadı.";
-            }
-            else
-            {
-                if (user.ExpirationDate.CompareTo(DateTime.UtcNow) < 0)
-                {
-                    user.ExpirationDate = DateTime.UtcNow.AddDays(1);
-                    user.Token = this.GenerateToken();
-                    await this.context.SaveChangesAsync();
-                }
-
-                response.Token = user.Token;
-                response.Result.Status = true;
-                response.Result.Message = "Başarılı.";
-            }
-
-            return response;
+            throw new NotImplementedException();
         }
 
-        public string GenerateToken() => Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-
+        public Task<BaseResponse> UpdateUser(UpdateUserRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface ICommonRepository
     {
-        public Task<LoginResponse> LoginAsync(LoginRequest request);
-        public string GenerateToken();
+        public Task<LoginResponse> Login(LoginRequest request);
+        public Task<BaseResponse> UpdateUser(UpdateUserRequest request);
     }
 }
