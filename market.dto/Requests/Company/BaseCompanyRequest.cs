@@ -6,6 +6,5 @@ namespace market.dto.Requests.Company
 {
     public class BaseCompanyRequest
     {
-        public int CompanyID { get; set; }
     }
 }

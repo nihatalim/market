@@ -35,6 +35,13 @@ namespace market.api.Repositories.Company
 
         public Task<BaseResponse> AddProductToOrder(AddProductToOrderRequest request, int UserID)
         {
+            Models.Order order = null;
+            Models.Product product = null;
+            Models.OrderProduct orderProduct = null;
+
+
+
+            
             throw new NotImplementedException();
         }
 
@@ -78,9 +85,59 @@ namespace market.api.Repositories.Company
             throw new NotImplementedException();
         }
 
-        public Task<BaseResponse> CreateProduct(CreateProductRequest request, int UserID)
+        public async Task<BaseResponse> CreateProduct(CreateProductRequest request, int UserID, int CompanyID)
         {
-            throw new NotImplementedException();
+            BaseResponse response = new BaseResponse();
+            Models.Product product = null;
+            Models.Company company = null;
+            Models.Category category = null;
+            Models.Property property = null;
+
+            category = request.CategoryID.HasValue ? 
+                        await this.context.Categories.Where(a => a.ID.Equals(request.CategoryID)).FirstOrDefaultAsync() : 
+                        null;
+
+            try
+            {
+                await context.Database.BeginTransactionAsync();
+
+                product = new Models.Product();
+                product.Name = request.Name;
+                product.Barcode = request.Barcode;
+                product.Price = request.Price;
+                product.TaxRate = request.TaxRate;
+                product.TotalPrice = Decimal.Add(product.Price, Decimal.Multiply(product.Price, Decimal.Divide(product.TaxRate, 100)));
+                product.CategoryID = category != null ? (int?)category.ID : null;
+                product.CompanyID = CompanyID;
+
+                context.Products.Add(product);
+                await context.SaveChangesAsync();
+
+                if(request.Properties != null && request.Properties.Count > 0)
+                {
+                    foreach(dto.Models.Property dtoProp in request.Properties)
+                    {
+                        property = new Models.Property();
+                        property.Name = dtoProp.Name;
+                        property.ProductID = product.ID;
+                        property.Value = dtoProp.Value;
+                        property.Type = dtoProp.Type != null ? sharedRepository.PropertyTypeConverter(dtoProp.Type) : Models.PropertyType.STRING;
+                        context.Properties.Add(property);
+                        await context.SaveChangesAsync();
+                    }
+                }
+
+                context.Database.CommitTransaction();
+
+                response.Result.Status = true;
+                response.Result.Message = "Operation successful";
+            }
+            catch (Exception)
+            {
+                context.Database.RollbackTransaction();
+            }
+
+            return response;
         }
 
         public Task<BaseResponse> CreateRole(CreateRoleRequest request, int UserID)
@@ -231,7 +288,7 @@ namespace market.api.Repositories.Company
         #endregion
 
         #region Product
-        public Task<BaseResponse> CreateProduct(CreateProductRequest request, int UserID);
+        public Task<BaseResponse> CreateProduct(CreateProductRequest request, int UserID, int CompanyID);
         public Task<BaseResponse> DeleteProduct(DeleteProductRequest request, int UserID);
         public Task<BaseResponse> UpdateProduct(UpdateProductRequest request, int UserID);
         public Task<GetAllProductsResponse> GetAllProducts(GetAllProductsRequest request, int UserID);

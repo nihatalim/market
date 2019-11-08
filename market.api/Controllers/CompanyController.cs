@@ -29,132 +29,151 @@ namespace market.api.Controllers
             this.repository = repository;
         }
 
-        [Authorize(Policy = "AddProductToOrderPrivilege")]
-        [HttpPost("AddProductToOrder")]
-        public async Task<BaseResponse> AddProductToOrder(AddProductToOrderRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.AddProductToOrder(request, id);
-        }
-        
-        [Authorize(Policy = "AddProductToOrderPrivilege")]
-        [HttpPost("AddPropertyToProduct")]
-        public async Task<BaseResponse> AddPropertyToProduct(AddPropertyToProductRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.AddPropertyToProduct(request, id);
-        }
+        //[Authorize(Policy = "AddProductToOrderPrivilege")]
+        //[HttpPost("AddProductToOrder")]
+        //public async Task<BaseResponse> AddProductToOrder(AddProductToOrderRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.AddProductToOrder(request, id);
+        //}
 
-        [HttpPost("CreateCategory")]
-        public async Task<BaseResponse> CreateCategory(CreateCategoryRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.CreateCategory(request, id);
-        }
+        //[Authorize(Policy = "AddProductToOrderPrivilege")]
+        //[HttpPost("AddPropertyToProduct")]
+        //public async Task<BaseResponse> AddPropertyToProduct(AddPropertyToProductRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.AddPropertyToProduct(request, id);
+        //}
 
-        [HttpPost("CreateOrder")]
-        public async Task<BaseResponse> CreateOrder(CreateOrderRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.CreateOrder(request, id);
-        }
+        //[HttpPost("CreateCategory")]
+        //public async Task<BaseResponse> CreateCategory(CreateCategoryRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.CreateCategory(request, id);
+        //}
+
+        //[HttpPost("CreateOrder")]
+        //public async Task<BaseResponse> CreateOrder(CreateOrderRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.CreateOrder(request, id);
+        //}
 
         [HttpPost("CreateProduct")]
         public async Task<BaseResponse> CreateProduct(CreateProductRequest request)
         {
+            /*
             int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+            List<string> userPrivileges = HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.UserData)).Select(claim => claim.Value).ToList();
             return await this.repository.CreateProduct(request, id);
+            */
+            return await this.repository.CreateProduct(request, GetUserID(HttpContext), GetCompanyID(HttpContext));
         }
 
-        [HttpPost("DeleteCategory")]
-        public async Task<BaseResponse> DeleteCategory(DeleteCategoryRequest request)
+        //[HttpPost("DeleteCategory")]
+        //public async Task<BaseResponse> DeleteCategory(DeleteCategoryRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.DeleteCategory(request, id);
+        //}
+
+        //[HttpPost("DeleteCompany")]
+        //public async Task<BaseResponse> DeleteCompany(DeleteCompanyRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.DeleteCompany(request, id);
+        //}
+
+        //[HttpPost("DeleteOrder")]
+        //public async Task<BaseResponse> DeleteOrder(DeleteOrderRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.DeleteOrder(request, id);
+        //}
+
+        //[HttpPost("DeleteProduct")]
+        //public async Task<BaseResponse> DeleteProduct(DeleteProductRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.DeleteProduct(request, id);
+        //}
+
+        //[HttpPost("DeleteProductFromOrder")]
+        //public async Task<BaseResponse> DeleteProductFromOrder(DeleteProductFromOrderRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.DeleteProductFromOrder(request, id);
+        //}
+
+        //[HttpPost("DeletePropertyFromProduct")]
+        //public async Task<BaseResponse> DeletePropertyFromProduct(DeletePropertyFromProductRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.DeletePropertyFromProduct(request, id);
+        //}
+
+        //[HttpPost("RegisterCompany")]
+        //public async Task<BaseResponse> RegisterCompany(RegisterCompanyRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.RegisterCompany(request);
+        //}
+
+        //[HttpPost("UpdateCategory")]
+        //public async Task<BaseResponse> UpdateCategory(UpdateCategoryRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.UpdateCategory(request, id);
+        //}
+
+        //[HttpPost("UpdateCompany")]
+        //public async Task<BaseResponse> UpdateCompany(UpdateCompanyRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.UpdateCompany(request, id);
+        //}
+
+        //[HttpPost("UpdateOrder")]
+        //public async Task<BaseResponse> UpdateOrder(UpdateOrderRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.UpdateOrder(request, id);
+        //}
+
+        //[HttpPost("UpdateProduct")]
+        //public async Task<BaseResponse> UpdateProduct(UpdateProductRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.UpdateProduct(request, id);
+        //}
+
+        //[HttpPost("UpdateProductFromOrder")]
+        //public async Task<BaseResponse> UpdateProductFromOrder(UpdateProductFromOrderRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.UpdateProductFromOrder(request, id);
+        //}
+
+        //[HttpPost("UpdateProperty")]
+        //public async Task<BaseResponse> UpdateProperty(UpdatePropertyRequest request)
+        //{
+        //    int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
+        //    return await this.repository.UpdateProperty(request, id);
+        //}
+
+        public static List<string> GetPrivileges(HttpContext context)
         {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.DeleteCategory(request, id);
+            return context.User.Claims.Where(a => a.Type.Equals(ClaimTypes.UserData)).Select(claim => claim.Value).ToList();
         }
 
-        [HttpPost("DeleteCompany")]
-        public async Task<BaseResponse> DeleteCompany(DeleteCompanyRequest request)
+        public static int GetUserID(HttpContext context)
         {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.DeleteCompany(request, id);
+            return Convert.ToInt32(context.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
         }
 
-        [HttpPost("DeleteOrder")]
-        public async Task<BaseResponse> DeleteOrder(DeleteOrderRequest request)
+        public static int GetCompanyID(HttpContext context)
         {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.DeleteOrder(request, id);
-        }
-
-        [HttpPost("DeleteProduct")]
-        public async Task<BaseResponse> DeleteProduct(DeleteProductRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.DeleteProduct(request, id);
-        }
-
-        [HttpPost("DeleteProductFromOrder")]
-        public async Task<BaseResponse> DeleteProductFromOrder(DeleteProductFromOrderRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.DeleteProductFromOrder(request, id);
-        }
-
-        [HttpPost("DeletePropertyFromProduct")]
-        public async Task<BaseResponse> DeletePropertyFromProduct(DeletePropertyFromProductRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.DeletePropertyFromProduct(request, id);
-        }
-
-        [HttpPost("RegisterCompany")]
-        public async Task<BaseResponse> RegisterCompany(RegisterCompanyRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.RegisterCompany(request);
-        }
-
-        [HttpPost("UpdateCategory")]
-        public async Task<BaseResponse> UpdateCategory(UpdateCategoryRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.UpdateCategory(request, id);
-        }
-
-        [HttpPost("UpdateCompany")]
-        public async Task<BaseResponse> UpdateCompany(UpdateCompanyRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.UpdateCompany(request, id);
-        }
-
-        [HttpPost("UpdateOrder")]
-        public async Task<BaseResponse> UpdateOrder(UpdateOrderRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.UpdateOrder(request, id);
-        }
-
-        [HttpPost("UpdateProduct")]
-        public async Task<BaseResponse> UpdateProduct(UpdateProductRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.UpdateProduct(request, id);
-        }
-
-        [HttpPost("UpdateProductFromOrder")]
-        public async Task<BaseResponse> UpdateProductFromOrder(UpdateProductFromOrderRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.UpdateProductFromOrder(request, id);
-        }
-
-        [HttpPost("UpdateProperty")]
-        public async Task<BaseResponse> UpdateProperty(UpdatePropertyRequest request)
-        {
-            int id = Convert.ToInt32(HttpContext.User.Claims.Where(a => a.Type.Equals(ClaimTypes.NameIdentifier)).FirstOrDefault().Value);
-            return await this.repository.UpdateProperty(request, id);
+            return Convert.ToInt32(context.User.Claims.Where(a => a.Type.Equals("CompanyID")).FirstOrDefault().Value);
         }
     }
 }

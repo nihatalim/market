@@ -20,39 +20,40 @@ namespace market.api.Middlewares
         }
         public async Task Invoke(HttpContext context, DatabaseContext database)
         {
+            Company company = null;
+            User user = null;
+
             string token = context.Request.Headers["Token"];
-            // TODO check token
+            string companyID = context.Request.Headers["CompanyID"];
+
             if(token != null)
             {
-                // Step 1: Get user information from redis using token.
-                // Step 2: If user information found, set UserID and Privileges.
-                // Step 3: If user information not found, get user information from database using token.
-                // Step 4: If user information found, set UserID and Privileges.
-                // Step 5: If user information not found, return baseresponse with authorization error message.
-
-                // TODO Step 1
-                // TODO Step 2
-
-                // Step 3
-                User user = await database.Users.Where(a => a.Token.Equals(token)).FirstOrDefaultAsync();
+                user = await database.Users.Where(a => a.Token.Equals(token)).FirstOrDefaultAsync();
 
                 if(user != null)
                 {
-                    // This process is working with lazy loading.
-                    List<Privilege> privileges = user.Roles.SelectMany(a => a.Role.Privileges.Select(b => b.Privilege)).ToList();
+                    company = await database.Companies.Where(a => a.ID.Equals(companyID)).FirstOrDefaultAsync();
 
-                    // Step 4
-                    Claim[] claims = new Claim[]
+                    if(company != null)
                     {
-                        new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
-                    };
-                    
-                    if (privileges != null && privileges.Count > 0)
-                    {
-                        privileges.ForEach(privilege => claims.Append(new Claim(ClaimTypes.UserData, privilege.Key)));
+                        // This process is working with lazy loading.
+                        List<Privilege> privileges = user.Roles.Where(a => a.CompanyID.Equals(company.ID)).SelectMany(a => a.Role.Privileges.Select(b => b.Privilege)).Distinct().ToList();
+
+                        // Step 4
+                        Claim[] claims = new Claim[]
+                        {
+                            new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+                            new Claim("CompanyID", company.ID.ToString()),
+                        };
+
+                        if (privileges != null && privileges.Count > 0)
+                        {
+                            privileges.ForEach(privilege => claims.Append(new Claim(ClaimTypes.UserData, privilege.Key)));
+                        }
+
+                        context.User.AddIdentity(new ClaimsIdentity(claims));
+                        await this.request.Invoke(context);
                     }
-
-                    context.User.AddIdentity(new ClaimsIdentity(claims));
                 }
                 
                 /* // Step 5
